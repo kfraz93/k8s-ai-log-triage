@@ -1,0 +1,15 @@
+.git
+.gitignore
+.venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.ruff_cache
+.pre-commit-config.yaml
+tests/
+database/
+terraform/
+k8s/
+*.md

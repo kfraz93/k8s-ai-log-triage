@@ -1,0 +1,62 @@
+[
+  {
+    "service_name": "postgres-db",
+    "error_message": "psycopg2.OperationalError: could not connect to server: Connection refused on port 5432",
+    "root_cause": "PostgreSQL StatefulSet Pod is unresponsive or network policy blocks incoming traffic on target port.",
+    "remediation": "Verify pod status with 'kubectl get pods -l app=postgres' and check NetworkPolicy rules allowing port 5432 traffic."
+  },
+  {
+    "service_name": "ingress-nginx",
+    "error_message": "HTTP 504 Gateway Timeout - NGINX upstream timed out after 30000ms",
+    "root_cause": "Downstream backend pod exceeded processing time limit or is stuck in an infinite loop/deadlock.",
+    "remediation": "Increase proxy_read_timeout in NGINX ConfigMap or scale up upstream deployment replicas using 'kubectl scale'."
+  },
+  {
+    "service_name": "fastapi-backend",
+    "error_message": "OOMKilled: Container memory limit exceeded (used 512Mi, limit 512Mi)",
+    "root_cause": "FastAPI pod exceeded RAM ceiling during heavy payload processing or vector array generation.",
+    "remediation": "Increase memory limit in deployment manifest under resources.limits.memory to 1Gi and check for memory leaks."
+  },
+  {
+    "service_name": "payment-api",
+    "error_message": "0/3 nodes are available: 3 Insufficient cpu. Pod status remains Pending.",
+    "root_cause": "Cluster node pool has exhausted requested CPU capacity across active workloads.",
+    "remediation": "Adjust pod CPU requests downward or enable Cluster Autoscaler on Azure AKS to add worker nodes."
+  },
+  {
+    "service_name": "auth-service",
+    "error_message": "CreateContainerConfigError: secret 'jwt-secret-key' not found",
+    "root_cause": "Deployment references a Kubernetes Secret that has not been applied to the target namespace.",
+    "remediation": "Apply missing secret using 'kubectl apply -f k8s/secret.yaml' and verify availability with 'kubectl get secrets'."
+  },
+  {
+    "service_name": "image-processor",
+    "error_message": "FailedMount: Read-only file system or PVC persistentvolumeclaim 'data-pvc' not bound",
+    "root_cause": "PersistentVolumeClaim failed to bind to a physical persistent volume due to storage class mismatch.",
+    "remediation": "Inspect PVC status with 'kubectl describe pvc' and verify underlying StorageClass driver configuration."
+  },
+  {
+    "service_name": "redis-cache",
+    "error_message": "CrashLoopBackOff: back-off 5m0s restarting failed container",
+    "root_cause": "Application panics immediately on boot due to corrupted configuration file or invalid command-line flag.",
+    "remediation": "Check application logs using 'kubectl logs <pod_name> --previous' to inspect terminal output prior to crash."
+  },
+  {
+    "service_name": "api-gateway",
+    "error_message": "x509: certificate has expired or is not yet valid for ingress endpoint",
+    "root_cause": "TLS secret attached to the Ingress resource contains an expired SSL/TLS certificate.",
+    "remediation": "Renew certificate via cert-manager or update tls.crt and tls.key in Kubernetes TLS Secret."
+  },
+  {
+    "service_name": "analytics-worker",
+    "error_message": "Readiness probe failed: HTTP probe failed with statuscode: 503",
+    "root_cause": "Pod is active but failing internal database connection check during startup sequence.",
+    "remediation": "Verify database availability and ensure initialDelaySeconds in readinessProbe configuration allows sufficient boot time."
+  },
+  {
+    "service_name": "ollama-llm",
+    "error_message": "CUDA error: out of memory or driver failure during model load",
+    "root_cause": "Model file exceeds available system GPU/RAM bounds or node lacks CUDA hardware acceleration.",
+    "remediation": "Switch to a quantized model variant (e.g., qwen2.5:3b-instruct-q4_K_M) or increase system RAM allocation."
+  }
+]
