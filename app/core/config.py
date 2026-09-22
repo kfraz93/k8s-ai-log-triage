@@ -2,14 +2,16 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    POSTGRES_USER: str
-    POSTGRES_PASSWORD: str
-    POSTGRES_DB: str
-    POSTGRES_HOST: str
-    POSTGRES_PORT: int
-    OLLAMA_BASE_URL: str
-    EMBED_MODEL: str
-    LLM_MODEL: str
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = "postgrespassword"
+    POSTGRES_DB: str = "log_triage"
+
+    # Ollama / AI Defaults
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    EMBED_MODEL: str = "nomic-embed-text"
+    LLM_MODEL: str = "qwen2.5:3b"
 
     @property
     def DATABASE_URL(self) -> str:
